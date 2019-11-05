@@ -1,8 +1,8 @@
 {
   "development": {
-    "username": "root",
-    "password": null,
-    "database": "exampledb",
+    "username": "project-2",
+    "password": "pass12##",
+    "database": "top_songsdb",
     "host": "localhost",
     "dialect": "mysql"
   },
