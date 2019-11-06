@@ -1,5 +1,5 @@
-DROP DATABASE IF EXISTS exampledb;
-CREATE DATABASE exampledb;
+DROP DATABASE IF EXISTS musifile_db;
+CREATE DATABASE musifile_db;
 
-DROP DATABASE IF EXISTS testdb;
-CREATE DATABASE testdb;
+USE musifile_db;
+

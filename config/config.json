@@ -2,7 +2,7 @@
   "development": {
     "username": "project-2",
     "password": "pass12##",
-    "database": "top_songsdb",
+    "database": "musifile_db",
     "host": "localhost",
     "dialect": "mysql"
   },
