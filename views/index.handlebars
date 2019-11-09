@@ -1,44 +1,123 @@
 <div id="home">
-  <div class="container">
-    <div class="row">
-      <div class="col-8 offset-2">
-        <h1>{{msg}}</h1>
-        <h2>This is MusiFile!</h2>
-        <form class="clearfix mb-4" action="POST">
-          <div class="form-group">
-            <label for="example-text">Artist you are looking for?</label>
-            <input type="text" id="example-text" class="form-control" aria-describedby="example-text" placeholder="Enter Artist Here">
-            <button id="submit" class="btn btn-primary float-right">Submit</button>
-          </div>
-          <div class="form-group">
-            <label for="example-text">What Album?</label>
-            <input type="text" id="example-text" class="form-control" aria-describedby="example-text" placeholder="Enter Album Here">
-            <button id="submit" class="btn btn-primary float-right">Submit</button>
-          </div>
-          <div class="form-group">
-            <label for="example-text">Any Particular Song/rack?</label>
-            <input type="text" id="example-text" class="form-control" aria-describedby="example-text" placeholder="Enter Song/Track Here">
-            <button id="submit" class="btn btn-primary float-right">Submit</button>
-          </div>
-          <div class="form-group">
-            <label for="example-description">Example Description</label>
-            <textarea class="form-control" id="example-description" aria-describedby="example-description" placeholder="Enter Example Description"></textarea>
-          </div>
-          <button id="submit" class="btn btn-primary float-right">Submit</button>
-        </form>
-        <h3>Examples:</h3>
-        <ul id="example-list" class="list-group">
-          {{#each examples}}
-          <li data-id="{{this.id}}" class="list-group-item">
-            <a href="example/{{this.id}}">{{this.text}}</a>
-            <button class="btn btn-danger float-right delete">ｘ</button>
-          </li>
-          {{/each}}
-        </ul>
-      </div>
-    </div>
-  </div>
-</div>
+    <div class="container">
+        <div class="row">
+            <div class="col-8 offset-2">
+                <div class="jumbotron">
+                    <h1>{{ msg }}</h1>
+                    <h2>This is MusiFile!</h2>
+                </div>
+                <form action="POST" class="clearfix mb-4">
+                    <div class="form-group">
+                        <label for="example-text">Artist you are looking for?</label>
+                        <input aria-describedby="example-text" class="form-control" id="txtArtistName" placeholder="Enter Artist Here" type="text">
+                            <button class="btn btn-primary float-right" id="artistSubmit">Submit</button>
+                        </div>
+                        <div class="form-group">
+                            <label for="example-text">What Album?</label>
+                            <input aria-describedby="example-text" class="form-control" id="example-text" placeholder="Enter Album Here" type="text">
+                                <button class="btn btn-primary float-right" id="albumSubmit">Submit</button>
+                            </div>
+                            <div class="form-group">
+                                <label for="example-text">Any Particular Song/Track?</label>
+                                <input aria-describedby="example-text" class="form-control" id="example-text" placeholder="Enter Song/Track Here" type="text">
+                                    <button class="btn btn-primary float-right" id="songSubmit">Submit</button>
+                                </div>
+                                <div class="form-group">
+                                    <label for="example-description">Example Description</label>
+                                    <textarea aria-describedby="example-description" class="form-control" id="example-description" placeholder="Enter Example Description"></textarea>
+                                </div>
+                                <button class="btn btn-primary float-right" id="submit">Submit</button>
+                            </form>
+                            <h3>Examples:</h3>
+                            <ul class="list-group" id="example-list">
+                                {{#each examples}}
+                                    <li data-id="{{ this.id }}" class="list-group-item">
+                                        <a href="example/{{ this.id }}">{{ this.text }}</a>
+                                        <button class="btn btn-danger float-right delete">ｘ</button>
+                                    </li>
+                                {{/each}}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-<script src="/js/index.js"></script>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js" type="text/javascript"></script>
+            <script src="/js/index.js"></script>
+
+            <script>
+                // A $( document ).ready() block.
+                $(document).ready(function () {
+                    console.log("Artist Ready!");
+                    $("#artistSubmit").click(function (event) {
+                        event.preventDefault();
+                        var myArtist = $("#txtArtistName").val();
+                        var urlApi = "http://ws.audioscrobbler.com/2.0/?method=artist.search&artist=" + myArtist + "&api_key=580beee892761fab1fcb540e44edf2ab&format=json";
+                        console.log(urlApi);
+
+                        // Last.fm artist search API documentation
+                        var artistSearch = {
+                            async: true,
+                            crossDomain: true,
+                            url: urlApi,
+                            method: "GET",
+                            headers: {}
+                        };
+
+                        $.ajax(artistSearch).done(function (response) {
+                            results = response;
+                            console.log(results);
+                        });
+                    });
+                });
+
+                $(document).ready(function () {
+                    console.log("Album Ready!");
+                    $("#albumSubmit").click(function (event) {
+                        event.preventDefault();
+                        var myAlbum = $("#txtAlbumName").val();
+                        var urlApi = "http://ws.audioscrobbler.com/2.0/?method=album.search&album=" + myAlbum + "&api_key=580beee892761fab1fcb540e44edf2ab&format=json";
+                        console.log(urlApi);
+
+                        // Last.fm album search API documentation
+                        var albumSearch = {
+                            async: true,
+                            crossDomain: true,
+                            url: urlApi,
+                            method: "GET",
+                            headers: {}
+                        };
+
+                        $.ajax(albumSearch).done(function (response) {
+                            results = response;
+                            console.log(results);
+                        });
+                    });
+                });
+                $(document).ready(function () {
+                    console.log("Song Ready!");
+                    $("#songSubmit").click(function (event) {
+                        event.preventDefault();
+                        var myTrack = $("#txtTrackName").val();
+                        var urlApi = "http://ws.audioscrobbler.com/2.0/?method=track.search&track=" + myTrack + "&api_key=580beee892761fab1fcb540e44edf2ab&format=json";
+                        console.log(urlApi);
+
+                        // Last.fm Song/Track search API documentation
+                        var trackSearch = {
+                            async: true,
+                            crossDomain: true,
+                            url: urlApi,
+                            method: "GET",
+                            headers: {}
+                        };
+
+                        $.ajax(trackSearch).done(function (response) {
+                            results = response;
+                            console.log(results);
+                        });
+                    });
+                });
+            </script>
+        </div>
+    </div>
+</div>
