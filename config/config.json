@@ -1,7 +1,7 @@
 {
   "development": {
-    "username": "root",
-    "password": "TDen!se31",
+    "username": "project-2",
+    "password": "pass12##",
     "database": "musifile_db",
     "host": "localhost",
     "dialect": "mysql"
