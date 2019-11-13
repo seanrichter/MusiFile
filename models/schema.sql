@@ -62,3 +62,4 @@ SELECT tracks.name AS 'Track Name',
     FROM tracks
     JOIN albums ON (albums.id = tracks.album)
     JOIN artists ON (artists.id = albums.artist);    
+© 2019 GitHub, Inc.
