@@ -16,12 +16,12 @@
                         </div>
                         <div class="form-group">
                             <label for="example-text">What Album?</label>
-                            <input aria-describedby="example-text" class="form-control" id="example-text" placeholder="Enter Album Here" type="text">
+                            <input aria-describedby="example-text" class="form-control" id="txtAlbumName" placeholder="Enter Album Here" type="text">
                                 <button class="btn btn-primary float-right" id="albumSubmit">Submit</button>
                             </div>
                             <div class="form-group">
                                 <label for="example-text">Any Particular Song/Track?</label>
-                                <input aria-describedby="example-text" class="form-control" id="example-text" placeholder="Enter Song/Track Here" type="text">
+                                <input aria-describedby="example-text" class="form-control" id="txtTrackName" placeholder="Enter Song/Track Here" type="text">
                                     <button class="btn btn-primary float-right" id="songSubmit">Submit</button>
                                 </div>
                                 <div class="form-group">
@@ -48,6 +48,7 @@
             <script src="/js/index.js"></script>
 
             <script>
+                // Last.fm artist search API documentation
                 // A $( document ).ready() block.
                 $(document).ready(function () {
                     console.log("Artist Ready!");
@@ -57,7 +58,6 @@
                         var urlApi = "http://ws.audioscrobbler.com/2.0/?method=artist.search&artist=" + myArtist + "&api_key=580beee892761fab1fcb540e44edf2ab&format=json";
                         console.log(urlApi);
 
-                        // Last.fm artist search API documentation
                         var artistSearch = {
                             async: true,
                             crossDomain: true,
@@ -69,54 +69,102 @@
                         $.ajax(artistSearch).done(function (response) {
                             results = response;
                             console.log(results);
+
+
+                            var artistMatches = results.results.artistmatches.artist;
+                            console.log(artistMatches);
+                            var artistAbridged = artistMatches.map(function (item) {
+                                try {
+                                    return {
+                                        name: item.name, url: item.url,
+                                        // image: item.image[0]
+                                        // eslint-disable-next-line indent
+                                        image: item.image
+                                    };
+                                } catch (err) { // don't do anything
+                                }
+                            });
                         });
                     });
-                });
 
-                $(document).ready(function () {
-                    console.log("Album Ready!");
-                    $("#albumSubmit").click(function (event) {
-                        event.preventDefault();
-                        var myAlbum = $("#txtAlbumName").val();
-                        var urlApi = "http://ws.audioscrobbler.com/2.0/?method=album.search&album=" + myAlbum + "&api_key=580beee892761fab1fcb540e44edf2ab&format=json";
-                        console.log(urlApi);
 
-                        // Last.fm album search API documentation
-                        var albumSearch = {
-                            async: true,
-                            crossDomain: true,
-                            url: urlApi,
-                            method: "GET",
-                            headers: {}
-                        };
+                    // Last.fm album search API documentation
+                    $(document).ready(function () {
+                        console.log("Album Ready!");
+                        $("#albumSubmit").click(function (event) {
+                            event.preventDefault();
+                            var myAlbum = $("#txtAlbumName").val();
+                            var urlApi = "http://ws.audioscrobbler.com/2.0/?method=album.search&album=" + myAlbum + "&api_key=580beee892761fab1fcb540e44edf2ab&format=json";
+                            console.log(urlApi);
 
-                        $.ajax(albumSearch).done(function (response) {
-                            results = response;
-                            console.log(results);
+                            var albumSearch = {
+                                async: true,
+                                crossDomain: true,
+                                url: urlApi,
+                                method: "GET",
+                                headers: {}
+                            };
+
+                            $.ajax(albumSearch).done(function (response) {
+                                results = response;
+                                console.log(results);
+
+
+                                var albumSearch = results.results.albummatches.album;
+                                console.log(albumSearch);
+                                var albumAbridged = albumSearch.map(function (item) {
+                                    try {
+                                        return {
+                                            name: item.name, url: item.url,
+                                            // image: item.image[0]
+                                            // eslint-disable-next-line indent
+                                            image: item.image
+                                        };
+                                    } catch (err) { // don't do anything
+                                    }
+                                });
+
+
+                            });
                         });
                     });
-                });
 
-                $(document).ready(function () {
-                    console.log("Song Ready!");
-                    $("#songSubmit").click(function (event) {
-                        event.preventDefault();
-                        var myTrack = $("#txtTrackName").val();
-                        var urlApi = "http://ws.audioscrobbler.com/2.0/?method=track.search&track=" + myTrack + "&api_key=580beee892761fab1fcb540e44edf2ab&format=json";
-                        console.log(urlApi);
 
-                        // Last.fm Song/Track search API documentation
-                        var trackSearch = {
-                            async: true,
-                            crossDomain: true,
-                            url: urlApi,
-                            method: "GET",
-                            headers: {}
-                        };
+                    // Last.fm Song/Track search API documentation
+                    $(document).ready(function () {
+                        console.log("Song Ready!");
+                        $("#songSubmit").click(function (event) {
+                            event.preventDefault();
+                            var myTrack = $("#txtTrackName").val();
+                            var urlApi = "http://ws.audioscrobbler.com/2.0/?method=track.search&track=" + myTrack + "&api_key=580beee892761fab1fcb540e44edf2ab&format=json";
+                            console.log(urlApi);
 
-                        $.ajax(trackSearch).done(function (response) {
-                            results = response;
-                            console.log(results);
+                            var trackSearch = {
+                                async: true,
+                                crossDomain: true,
+                                url: urlApi,
+                                method: "GET",
+                                headers: {}
+                            };
+
+                            $.ajax(trackSearch).done(function (response) {
+                                results = response;
+                                console.log(results);
+
+                                var trackMatches = results.results.trackmatches.track;
+                                console.log(trackMatches);
+                                var trackAbridged = trackMatches.map(function (item) {
+                                    try {
+                                        return {
+                                            name: item.name, url: item.url,
+                                            // image: item.image[0]
+                                            // eslint-disable-next-line indent
+                                            image: item.image
+                                        };
+                                    } catch (err) { // don't do anything
+                                    }
+                                });
+                            });
                         });
                     });
                 });
