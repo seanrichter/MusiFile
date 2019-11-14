@@ -30,50 +30,78 @@
                                 </div>
                                 <button class="btn btn-primary float-right" id="submit">Submit</button>
                             </form>
-                            <h3>Favorites:</h3>
-                            <ul class="list-group" id="example-list">
-                                {{#each examples}}
-                                    <li data-id="{{ this.id }}" class="list-group-item">
-                                        <a href="example/{{ this.id }}">{{ this.text }}</a>
-                                        <button class="btn btn-danger float-right delete">ｘ</button>
-                                    </li>
-                                {{/each}}
-                            </ul>
+                            <div>
+                                <div id="BandName"></div>
+                                <h3>Examples:</h3>
+                                <ul class="list-group" id="example-list">
+                                    {{#each examples}}
+                                        <li data-id="{{ this.id }}" class="list-group-item">
+                                            <a href="example/{{ this.id }}">{{ this.text }}</a>
+                                            <button class="btn btn-danger float-right delete">ｘ</button>
+                                        </li>
+                                    {{/each}}
+                                </ul>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-
             <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js" type="text/javascript"></script>
             <script src="/js/index.js"></script>
 
             <script>
                 // Last.fm artist search API documentation
-                // A $( document ).ready() block.
                 $(document).ready(function () {
-                    console.log("Artist Ready!");
+                    //console.log("Artist Ready!");
                     $("#artistSubmit").click(function (event) {
                         event.preventDefault();
                         var myArtist = $("#txtArtistName").val();
-                        var urlApi = "http://ws.audioscrobbler.com/2.0/?method=artist.search&artist=" + myArtist + "&api_key=580beee892761fab1fcb540e44edf2ab&format=json";
-                        console.log(urlApi);
+                        var queryURL = "http://ws.audioscrobbler.com/2.0/?method=artist.search&artist=" + myArtist + "&api_key=580beee892761fab1fcb540e44edf2ab&format=json";
+                        //console.log(queryURL);
 
                         var artistSearch = {
                             async: true,
                             crossDomain: true,
-                            url: urlApi,
+                            url: queryURL,
                             method: "GET",
                             headers: {}
                         };
 
                         $.ajax(artistSearch).done(function (response) {
                             results = response;
-                            console.log(results);
+                        
+                            // Creating a div for the results
+                            var artistResults = $("<div>");
+
+                            for (var i = 0; i < artistResults.length; i++) {
+                                console.log(artistResults[i]);
+                
+                            }
+
+                            // Storing the result item's name
+                            var artistName = results.results.artistmatches.artist[i];
+                                
+                            // Creating a paragraph tag with the result artists name
+                            var p = $("<p>").text("artist: " + artistName );
+
+                            // Creating an image tag
+                            var artistImage = $("<img>");
+
+                            // Giving the image tag an src attribute of a proprty pulled off the
+                            // result item
+                            artistImage.attr("src", results.results.artistmatches.artist[i]);
+                            console.log(results.results.artistmatches.artist[0]);
+                            
+                            // Appending the paragraph and personImage we created to the "gifDiv" div we created
+                            artistResults.append(p);
+                            artistResults.append(artistImage);
+
+                            // Prepending the gifDiv to the "#gifs-appear-here" div in the HTML
+                            $("#BandName").prepend(artistResults);
+                            //console.log(artistResults);
 
 
-                            var artistMatches = results.results.artistmatches.artist;
-                            console.log(artistMatches);
-                            var artistAbridged = artistMatches.map(function (item) {
+                            var artistAbridged = artistResults.map(function (item) {
                                 try {
                                     return {
                                         name: item.name, url: item.url,
@@ -90,17 +118,17 @@
 
                     // Last.fm album search API documentation
                     $(document).ready(function () {
-                        console.log("Album Ready!");
+                        //console.log("Album Ready!");
                         $("#albumSubmit").click(function (event) {
                             event.preventDefault();
                             var myAlbum = $("#txtAlbumName").val();
-                            var urlApi = "http://ws.audioscrobbler.com/2.0/?method=album.search&album=" + myAlbum + "&api_key=580beee892761fab1fcb540e44edf2ab&format=json";
-                            console.log(urlApi);
+                            var queryURL = "http://ws.audioscrobbler.com/2.0/?method=album.search&album=" + myAlbum + "&api_key=580beee892761fab1fcb540e44edf2ab&format=json";
+                            console.log(queryURL);
 
                             var albumSearch = {
                                 async: true,
                                 crossDomain: true,
-                                url: urlApi,
+                                url: queryURL,
                                 method: "GET",
                                 headers: {}
                             };
@@ -123,8 +151,6 @@
                                     } catch (err) { // don't do anything
                                     }
                                 });
-
-
                             });
                         });
                     });
@@ -132,17 +158,17 @@
 
                     // Last.fm Song/Track search API documentation
                     $(document).ready(function () {
-                        console.log("Song Ready!");
+                        //console.log("Song Ready!");
                         $("#songSubmit").click(function (event) {
                             event.preventDefault();
                             var myTrack = $("#txtTrackName").val();
-                            var urlApi = "http://ws.audioscrobbler.com/2.0/?method=track.search&track=" + myTrack + "&api_key=580beee892761fab1fcb540e44edf2ab&format=json";
-                            console.log(urlApi);
+                            var queryURL = "http://ws.audioscrobbler.com/2.0/?method=track.search&track=" + myTrack + "&api_key=580beee892761fab1fcb540e44edf2ab&format=json";
+                            console.log(queryURL);
 
                             var trackSearch = {
                                 async: true,
                                 crossDomain: true,
-                                url: urlApi,
+                                url: queryURL,
                                 method: "GET",
                                 headers: {}
                             };
