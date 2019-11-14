@@ -164,3 +164,15 @@ header.masthead .bg-circle-4 {
    font-size: larger;
    color: #bd0760;
 }
+
+#bandName {
+   color: blue;
+}
+
+#albumName {
+   color: blue;
+}
+
+#trackName {
+   color: blue;
+}

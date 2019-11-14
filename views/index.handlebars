@@ -31,8 +31,10 @@
                                 <button class="btn btn-primary float-right" id="submit">Submit</button>
                             </form>
                             <div>
-                                <div id="BandName"></div>
-                                <h3>Examples:</h3>
+                                <div id="bandName"></div>
+                                <div id="albumName"></div>
+                                <div id="trackName"></div>
+                                <h3></h3>
                                 <ul class="list-group" id="example-list">
                                     {{#each examples}}
                                         <li data-id="{{ this.id }}" class="list-group-item">
@@ -51,13 +53,12 @@
 
             <script>
                 // Last.fm artist search API documentation
-                $(document).ready(function () {
-                    //console.log("Artist Ready!");
+                $(document).ready(function () { // console.log("Artist Ready!");
                     $("#artistSubmit").click(function (event) {
                         event.preventDefault();
                         var myArtist = $("#txtArtistName").val();
                         var queryURL = "http://ws.audioscrobbler.com/2.0/?method=artist.search&artist=" + myArtist + "&api_key=580beee892761fab1fcb540e44edf2ab&format=json";
-                        //console.log(queryURL);
+                        // console.log(queryURL);
 
                         var artistSearch = {
                             async: true,
@@ -69,36 +70,54 @@
 
                         $.ajax(artistSearch).done(function (response) {
                             results = response;
-                        
+
+
                             // Creating a div for the results
                             var artistResults = $("<div>");
 
                             for (var i = 0; i < artistResults.length; i++) {
-                                console.log(artistResults[i]);
-                
+                                console.log(results.results.artistmatches.artist[0].name);
+
+
+                                // Creating a div for the gif
+                                var musicContainer = $("<div>");
+
+                                // Storing the Artists name in a variable
+                                var artistName = results.results.artistmatches.artist[i].name;
+
+                                // Creating a paragraph tag with the Artists name
+                                var newHeading = $("<h2>").text("Artist: " + artistName);
+
+                                // Appending the paragraph we created to the "musicContainer" div we created
+                                musicContainer.append(newHeading);
+
+                                // Prepending the gifDiv to the "#someUniqueId" div in the HTML
+                                $("#bandName").prepend(musicContainer);
                             }
 
-                            // Storing the result item's name
-                            var artistName = results.results.artistmatches.artist[i];
-                                
-                            // Creating a paragraph tag with the result artists name
-                            var p = $("<p>").text("artist: " + artistName );
 
-                            // Creating an image tag
-                            var artistImage = $("<img>");
+                            // Creating a URL tag
+                            var urlResults = $("<div>");
 
-                            // Giving the image tag an src attribute of a proprty pulled off the
-                            // result item
-                            artistImage.attr("src", results.results.artistmatches.artist[i]);
-                            console.log(results.results.artistmatches.artist[0]);
-                            
-                            // Appending the paragraph and personImage we created to the "gifDiv" div we created
-                            artistResults.append(p);
-                            artistResults.append(artistImage);
+                            for (var i = 0; i < artistResults.length; i++) {
+                                console.log(results.results.artistmatches.artist[0].url);
 
-                            // Prepending the gifDiv to the "#gifs-appear-here" div in the HTML
-                            $("#BandName").prepend(artistResults);
-                            //console.log(artistResults);
+                                // Creating a div for the gif
+                                var urlContainer = $("<a>");
+                                // Storing the Artists name in a variable
+                                var artistURL = results.results.artistmatches.artist[i].url;
+
+                                // Creating a paragraph tag with the Artists name
+                                var newHeading = $("<h2>").text("Artist Last.FM Link: " + artistURL);
+
+                                // Appending the paragraph we created to the "musicContainer" div we created
+                                urlContainer.append(newHeading);
+
+                                // Prepending the gifDiv to the "#someUniqueId" div in the HTML
+                                $("#bandName").prepend(urlContainer);
+
+
+                            }
 
 
                             var artistAbridged = artistResults.map(function (item) {
@@ -111,14 +130,14 @@
                                     };
                                 } catch (err) { // don't do anything
                                 }
+
                             });
                         });
                     });
 
 
                     // Last.fm album search API documentation
-                    $(document).ready(function () {
-                        //console.log("Album Ready!");
+                    $(document).ready(function () { // console.log("Album Ready!");
                         $("#albumSubmit").click(function (event) {
                             event.preventDefault();
                             var myAlbum = $("#txtAlbumName").val();
@@ -137,10 +156,30 @@
                                 results = response;
                                 console.log(results);
 
+                                // Creating a div for the results
+                                var albumResults = $("<div>");
 
-                                var albumSearch = results.results.albummatches.album;
-                                console.log(albumSearch);
-                                var albumAbridged = albumSearch.map(function (item) {
+                                for (var i = 0; i < albumResults.length; i++) {
+                                    console.log(results.results.albummatches.album[i].name);
+
+
+                                    // Creating a div for the gif
+                                    var albumContainer = $("<div>");
+
+                                    // Storing the album name in a variable
+                                    var albumName = results.results.albummatches.album[i].name;
+
+                                    // Creating a paragraph tag with the album name
+                                    var newHeading = $("<h2>").text("Album: " + albumName);
+
+                                    // Appending the paragraph we created to the "albumContainer" div we created
+                                    albumContainer.append(newHeading);
+
+                                    // Prepending the gifDiv to the "#someUniqueId" div in the HTML
+                                    $("#bandName").prepend(albumContainer);
+                                }
+
+                                var albumAbridged = albumResults.map(function (item) {
                                     try {
                                         return {
                                             name: item.name, url: item.url,
@@ -157,8 +196,7 @@
 
 
                     // Last.fm Song/Track search API documentation
-                    $(document).ready(function () {
-                        //console.log("Song Ready!");
+                    $(document).ready(function () { // console.log("Song Ready!");
                         $("#songSubmit").click(function (event) {
                             event.preventDefault();
                             var myTrack = $("#txtTrackName").val();
@@ -175,11 +213,31 @@
 
                             $.ajax(trackSearch).done(function (response) {
                                 results = response;
-                                console.log(results);
 
-                                var trackMatches = results.results.trackmatches.track;
-                                console.log(trackMatches);
-                                var trackAbridged = trackMatches.map(function (item) {
+
+                                // Creating a div for the results
+                                var trackSearch = $("<div>");
+
+                                for (var i = 0; i < trackSearch.length; i++) {
+                                    console.log(results.results.trackmatches.track[i].name);
+
+
+                                    // Creating a div for the gif
+                                    var tracksContainer = $("<div>");
+
+                                    // Storing the album name in a variable
+                                    var trackName = results.results.trackmatches.track[i].name;
+
+                                    // Creating a paragraph tag with the album name
+                                    var newHeading = $("<h2>").text("Track: " + trackName);
+
+                                    // Appending the paragraph we created to the "tracksContainer" div we created
+                                    tracksContainer.append(newHeading);
+
+                                    // Prepending the gifDiv to the "#someUniqueId" div in the HTML
+                                    $("#trackName").prepend(tracksContainer);
+                                }
+                                var trackAbridged = trackSearch.map(function (item) {
                                     try {
                                         return {
                                             name: item.name, url: item.url,
